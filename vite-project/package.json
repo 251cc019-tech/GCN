@@ -1,5 +1,5 @@
 {
-  "name": "gcn-srcw",
+  "name": "vite-project",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,13 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.3.3",
-    "clsx": "^2.1.1",
-    "lucide-react": "^1.33.0",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "tailwind-merge": "^3.6.0",
-    "tailwindcss": "^4.3.3"
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

@@ -1,122 +1,126 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import React, { useState, useEffect } from 'react';
+import TopNav from './components/layout/TopNav.jsx';
+import Footer from './components/layout/Footer.jsx';
+import LandingPage from './pages/LandingPage.jsx';
+import WorkspaceUploadPage from './pages/WorkspaceUploadPage.jsx';
+import ComparisonPage from './pages/ComparisonPage.jsx';
+import AuditReportPage from './pages/AuditReportPage.jsx';
+import HistoryPage from './pages/HistoryPage.jsx';
 
-function App() {
-  const [count, setCount] = useState(0)
+export function App() {
+  // Navigation state
+  const [currentView, setCurrentView] = useState('landing'); // 'landing' | 'workspace' | 'comparison' | 'report' | 'history'
+  const [activeAuditId, setActiveAuditId] = useState(null);
+
+  // Sync with browser URL hash or path for bookmarking/reload
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace(/^#/, '');
+      if (hash.startsWith('/workspace/')) {
+        const parts = hash.split('/');
+        const id = parts[2];
+        if (parts[3] === 'report') {
+          setActiveAuditId(id);
+          setCurrentView('report');
+        } else if (id) {
+          setActiveAuditId(id);
+          setCurrentView('comparison');
+        } else {
+          setCurrentView('workspace');
+        }
+      } else if (hash === '/workspace') {
+        setCurrentView('workspace');
+      } else if (hash === '/history') {
+        setCurrentView('history');
+      } else {
+        setCurrentView('landing');
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    handleHashChange();
+
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  const navigateTo = (view, auditId = null) => {
+    if (auditId) setActiveAuditId(auditId);
+    setCurrentView(view);
+
+    if (view === 'landing') {
+      window.location.hash = '/';
+    } else if (view === 'workspace') {
+      window.location.hash = '/workspace';
+    } else if (view === 'comparison') {
+      const id = auditId || activeAuditId || 'sample';
+      window.location.hash = `/workspace/${id}`;
+    } else if (view === 'report') {
+      const id = auditId || activeAuditId || 'sample';
+      window.location.hash = `/workspace/${id}/report`;
+    } else if (view === 'history') {
+      window.location.hash = '/history';
+    }
+  };
+
+  const handleAuditCreated = (auditId) => {
+    setActiveAuditId(auditId);
+    navigateTo('comparison', auditId);
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="min-h-screen flex flex-col bg-[var(--paper)] text-[var(--ink)] font-sans antialiased">
+      
+      {/* Top Header Navigation */}
+      <TopNav
+        currentView={currentView}
+        onNavigate={navigateTo}
+        activeAuditId={activeAuditId}
+      />
 
-      <div className="ticks"></div>
+      {/* Main Page Body */}
+      <main className="flex-1 flex flex-col">
+        {currentView === 'landing' && (
+          <LandingPage
+            onStartAudit={() => navigateTo('workspace')}
+            onViewHistory={() => navigateTo('history')}
+          />
+        )}
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        {currentView === 'workspace' && (
+          <WorkspaceUploadPage
+            onAuditCreated={handleAuditCreated}
+          />
+        )}
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        {currentView === 'comparison' && (
+          <ComparisonPage
+            auditId={activeAuditId || 'audit-iso-9001-sample'}
+            onOpenReport={(id) => navigateTo('report', id)}
+            onBackToWorkspace={() => navigateTo('workspace')}
+          />
+        )}
+
+        {currentView === 'report' && (
+          <AuditReportPage
+            auditId={activeAuditId || 'audit-iso-9001-sample'}
+            onBackToComparison={() => navigateTo('comparison', activeAuditId)}
+            onBackToWorkspace={() => navigateTo('workspace')}
+          />
+        )}
+
+        {currentView === 'history' && (
+          <HistoryPage
+            onOpenComparison={(id) => navigateTo('comparison', id)}
+            onOpenReport={(id) => navigateTo('report', id)}
+            onNewAudit={() => navigateTo('workspace')}
+          />
+        )}
+      </main>
+
+      {/* Footer */}
+      {currentView !== 'comparison' && <Footer />}
+    </div>
+  );
 }
 
-export default App
+export default App;

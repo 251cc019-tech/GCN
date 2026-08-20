@@ -1,0 +1,72 @@
+:root {
+  /* ClauseNova Color Tokens */
+  --ink: #1B2333;
+  --paper: #F7F5EF;
+  --surface: #FFFFFF;
+  --rule: #D8D3C7;
+  --slate: #5B6472;
+  --verified: #2F6E4F;
+  --flagged: #B23A2E;
+  --pending: #C08A2E;
+
+  /* Status background tints */
+  --verified-light: #EBF4EF;
+  --flagged-light: #FBF0EF;
+  --pending-light: #FAF4E8;
+
+  /* Typography */
+  --font-display: 'Newsreader', Georgia, serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--paper);
+  color: var(--ink);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+/* Auditor Leader Line Motif */
+.leader-line {
+  position: relative;
+}
+
+.leader-line::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -1rem;
+  width: 1rem;
+  border-top: 1px dashed var(--rule);
+}
+
+/* Custom Scrollbar for Dense Regulatory Text */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--paper);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--rule);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--slate);
+}
