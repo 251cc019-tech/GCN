@@ -8,10 +8,14 @@ export async function request(endpoint, options = {}) {
     defaultHeaders['Content-Type'] = 'application/json';
   }
 
+  const token = typeof window !== 'undefined' ? localStorage.getItem('clausenova_auth_token') : null;
+  const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
+
   const config = {
     ...options,
     headers: {
       ...defaultHeaders,
+      ...authHeader,
       ...options.headers,
     },
   };

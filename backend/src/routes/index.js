@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import auditRoutes from './audit.routes.js';
+import authRoutes from './auth.routes.js';
 import { successResponse } from '../utils/response.js';
 
 const router = Router();
@@ -13,6 +14,9 @@ router.get('/health', (req, res) => {
     version: '1.0.0'
   });
 });
+
+// Auth & Session routes
+router.use('/auth', authRoutes);
 
 // Audit routes
 router.use('/audits', auditRoutes);

@@ -6,10 +6,12 @@ import WorkspaceUploadPage from './pages/WorkspaceUploadPage.jsx';
 import ComparisonPage from './pages/ComparisonPage.jsx';
 import AuditReportPage from './pages/AuditReportPage.jsx';
 import HistoryPage from './pages/HistoryPage.jsx';
+import LoginPage from './pages/LoginPage.jsx';
+import { AuthProvider } from './context/AuthContext.jsx';
 
-export function App() {
-  // Navigation state
-  const [currentView, setCurrentView] = useState('landing'); // 'landing' | 'workspace' | 'comparison' | 'report' | 'history'
+function AppContent() {
+  // Navigation state: 'landing' | 'workspace' | 'comparison' | 'report' | 'history' | 'login'
+  const [currentView, setCurrentView] = useState('landing');
   const [activeAuditId, setActiveAuditId] = useState(null);
 
   // Sync with browser URL hash or path for bookmarking/reload
@@ -32,6 +34,8 @@ export function App() {
         setCurrentView('workspace');
       } else if (hash === '/history') {
         setCurrentView('history');
+      } else if (hash === '/login' || hash === 'login') {
+        setCurrentView('login');
       } else {
         setCurrentView('landing');
       }
@@ -59,6 +63,8 @@ export function App() {
       window.location.hash = `/workspace/${id}/report`;
     } else if (view === 'history') {
       window.location.hash = '/history';
+    } else if (view === 'login') {
+      window.location.hash = '/login';
     }
   };
 
@@ -83,6 +89,14 @@ export function App() {
           <LandingPage
             onStartAudit={() => navigateTo('workspace')}
             onViewHistory={() => navigateTo('history')}
+            onLogin={() => navigateTo('login')}
+          />
+        )}
+
+        {currentView === 'login' && (
+          <LoginPage
+            onSuccess={() => navigateTo('workspace')}
+            onNavigate={navigateTo}
           />
         )}
 
@@ -120,6 +134,14 @@ export function App() {
       {/* Footer */}
       {currentView !== 'comparison' && <Footer />}
     </div>
+  );
+}
+
+export function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 

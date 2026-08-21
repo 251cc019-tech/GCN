@@ -1,7 +1,7 @@
 import React from 'react';
-import { ShieldCheck, FileCheck, ArrowRight, CheckCircle2, Award, Sparkles, BookOpen, Layers } from 'lucide-react';
+import { ShieldCheck, ArrowRight, Sparkles, LogIn, Lock } from 'lucide-react';
 
-export function LandingPage({ onStartAudit, onViewHistory }) {
+export function LandingPage({ onStartAudit, onViewHistory, onLogin }) {
   return (
     <div className="flex-1">
       
@@ -26,7 +26,7 @@ export function LandingPage({ onStartAudit, onViewHistory }) {
               <button
                 type="button"
                 onClick={onStartAudit}
-                className="px-6 py-3.5 bg-[var(--ink)] text-[var(--paper)] rounded-sm text-sm font-mono uppercase tracking-wider font-semibold hover:opacity-90 transition-all flex items-center gap-2 shadow-xs"
+                className="px-6 py-3.5 bg-[var(--ink)] text-[var(--paper)] rounded-sm text-sm font-mono uppercase tracking-wider font-semibold hover:opacity-90 transition-all flex items-center gap-2 shadow-xs cursor-pointer"
               >
                 <span>Launch Audit Workspace</span>
                 <ArrowRight className="w-4 h-4" />
@@ -34,10 +34,19 @@ export function LandingPage({ onStartAudit, onViewHistory }) {
 
               <button
                 type="button"
-                onClick={onViewHistory}
-                className="px-6 py-3.5 bg-[var(--paper)] text-[var(--ink)] border border-[var(--rule)] rounded-sm text-sm font-mono uppercase tracking-wider font-semibold hover:bg-[#ECE8DC] transition-all"
+                onClick={onLogin}
+                className="px-6 py-3.5 bg-[var(--paper)] text-[var(--ink)] border border-[var(--rule)] rounded-sm text-sm font-mono uppercase tracking-wider font-semibold hover:bg-[#ECE8DC] transition-all flex items-center gap-2 cursor-pointer"
               >
-                <span>View Sample Audits</span>
+                <LogIn className="w-4 h-4 text-[var(--slate)]" />
+                <span>Auditor Sign In</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={onViewHistory}
+                className="px-4 py-3.5 text-[var(--slate)] hover:text-[var(--ink)] rounded-sm text-xs font-mono uppercase tracking-wider font-semibold transition-all cursor-pointer"
+              >
+                <span>View Sample Audits →</span>
               </button>
             </div>
           </div>
